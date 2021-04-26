@@ -110,10 +110,10 @@ int insereHash_EnderAberto(Hash* ha, struct aluno al){
     if(ha == NULL || ha->qtd == ha->TABLE_SIZE)
         return 0;
 
-int chave = al.matricula;
-int chave = valorString(al.nome);
+    int chave = al.matricula;
+    int chave = valorString(al.nome);
 
-int i, pos, newPos;
+    int i, pos, newPos;
     pos = chaveDivisao(chave, ha->TABLE_SIZE);
     for (i = 0; i < ha->TABLE_SIZE; i++){
         newPos = sondagemLinear(pos,i,ha->TABLE_SIZE);
