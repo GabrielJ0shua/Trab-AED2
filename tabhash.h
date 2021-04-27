@@ -4,7 +4,7 @@ struct aluno{
     float n1,n2,n3;
 };
 typedef struct hash Hash;
-
+typedef struct aluno Aluno;
 Hash* criaHash(int TABLE_SIZE, int TAMANHO_TIPO);
 void liberaHash(Hash *ha);
 int chaveDivisao(int chave, int TABLE_SIZE);
