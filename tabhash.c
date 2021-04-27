@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "tabhash.h"
 #define M 1601
 
@@ -11,16 +11,16 @@ struct hash{
 Hash* criaHash(int TABLE_SIZE, int TAMANHO_TIPO){
     Hash* ha = (Hash*) malloc(sizeof(Hash));
     if(ha !=NULL){
-    int i;
-    ha->TABLE_SIZE = TABLE_SIZE;
-    ha->dados = (void*)malloc(TABLE_SIZE *(TAMANHO_TIPO));
-    if(ha->dados == NULL){
-    free(ha);
-    return NULL;
-    }
-    ha->qtd = 0;
-    for(i=0; i < ha->TABLE_SIZE; i++)
-        ha->dados[i] = NULL;
+        int i;
+        ha->TABLE_SIZE = TABLE_SIZE;
+        ha->dados = (void*)malloc(TABLE_SIZE *(TAMANHO_TIPO));
+        if(ha->dados == NULL){
+            free(ha);
+            return NULL;
+        }
+        ha->qtd = 0;
+        for(i=0; i < ha->TABLE_SIZE; i++)
+            ha->dados[i] = NULL;
     }
     return ha;
 }
@@ -28,12 +28,12 @@ Hash* criaHash(int TABLE_SIZE, int TAMANHO_TIPO){
 void liberaHash(Hash *ha){
     if(ha != NULL){
         int i;
-    for(i = 0; i < ha->TABLE_SIZE; i++){
-        if(ha->dados[i] != NULL)
-            free(ha->dados[i]);
+        for(i = 0; i < ha->TABLE_SIZE; i++){
+            if(ha->dados[i] != NULL)
+                free(ha->dados[i]);
         }
-    free(ha->dados);
-    free(ha);
+        free(ha->dados);
+        free(ha);
     }
 }
 
@@ -46,10 +46,20 @@ int sondagemLinear(int pos, int i, int TABLE_SIZE){
 }
 
 int insereHash(Hash* ha,int chave, void *dados){
-     if(ha == NULL || ha->qtd == ha->TABLE_SIZE)
+    if(ha == NULL || ha->qtd == ha->TABLE_SIZE)
         return 0;
-    if (ha->qtd/ha->TABLE_SIZE > 0.75)
-       ha->TABLE_SIZE = 2* ha->TABLE_SIZE;
+
+    if ((float)ha->qtd / (float)ha->TABLE_SIZE > 0.75){
+        // int i = ha->TABLE_SIZE;
+        ha->TABLE_SIZE = 2* ha->TABLE_SIZE;
+        // while(i < ha->TABLE_SIZE){
+        //     ha->dados[i] = NULL;
+        //     i++;
+        // }
+    }
+    // verifica se mais de 75% das posicoes da tabela estao ocupadas
+    // se estiverem, dobra o tamanho da tabela
+
     int i, pos, newPos;
     pos = chaveDivisao(chave, ha->TABLE_SIZE);
     for (i = 0; i < ha->TABLE_SIZE; i++){
@@ -73,15 +83,18 @@ int buscaHash(Hash* ha, int chave , void *dados){
     if(ha == NULL)
         return 0;
 
-    int i, pos, newPos;
+    int i, pos, newPos, vchave;
     pos =  chaveDivisao(chave, ha->TABLE_SIZE);
     for(i=0; i < ha->TABLE_SIZE; i++){
         newPos = sondagemLinear(pos, i, ha->TABLE_SIZE);
         if(ha->dados[newPos] == NULL)
             return 0;
-            //((() ha->dados[newPos]) == chave)
+        
+        memcpy(&vchave, ha->dados[newPos], sizeof(int));
+        // copia os bits do tamanho de um inteiro DE ha->dados[newPos] PARA vchave
+        // restricao: errado se o inteiro (que tambem eh a chave) nao for o primeiro tipo de dado em ha->dados[newPos]
 
-        if(ha->dados[newPos]->(struct aluno.matricula) == chave){
+        if(vchave == chave){
             dados = (ha->dados[newPos]);
             return 1;
         }
