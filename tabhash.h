@@ -1,3 +1,4 @@
+#define M 1601
 struct aluno{
     int matricula;
     char nome[30];
@@ -5,6 +6,7 @@ struct aluno{
 };
 typedef struct hash Hash;
 typedef struct aluno Aluno;
+
 Hash* criaHash(int TABLE_SIZE, int TAMANHO_TIPO);
 void liberaHash(Hash *ha);
 int chaveDivisao(int chave, int TABLE_SIZE);

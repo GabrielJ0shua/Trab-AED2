@@ -1,23 +1,27 @@
-#include "tad.h"
+#include "tabhash.h"
 #include <stdio.h>
-#include <math.h>
 
-int main(void)
-{
+int main(void){
     //variáveis auxiliares e lista apontando para NULL.
     int opc;
+    Hash* ha;
+    Aluno estudante;
+    FILE *dados;
+    dados = fopen("arquivo.txt", "a");
     //Menu
     do{
         printf("\nEscolha uma opção:\n1 - Inicializar o Hash\n2-Inserir a base de dados\n3-Consultar a posição\n4-Sair do sistema\n");
         scanf("%d",&opc);
         switch(opc){
-            //Iniciando a lista
+            
             case(1):
+                liberaHash(ha);
+                ha = criaHash(M,0);
                 printf("\nPronto");   
             break;
             //Inserindo o valor e verificando se deu certo
             case(2):
-                             
+
             break;
             //verificando se tem valores antes de imprimir e imprimir
             case(3):
