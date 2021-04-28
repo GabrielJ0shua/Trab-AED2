@@ -1,43 +1,53 @@
-#include "tad.h"
+#include "tabhash.h"
 #include <stdio.h>
-#include <math.h>
 
-int main(void)
-{
+int main(void){
     //variáveis auxiliares e lista apontando para NULL.
     int opc;
+    Hash* ha;
+    Aluno estudante;
+    FILE *dados;
+    char auxTexto[50];
     //Menu
     do{
         printf("\nEscolha uma opção:\n1 - Inicializar o Hash\n2-Inserir a base de dados\n3-Consultar a posição\n4-Sair do sistema\n");
         scanf("%d",&opc);
         switch(opc){
-            //Iniciando a lista
+            
             case(1):
+                liberaHash(ha);
+                ha = criaHash(M,0);
                 printf("\nPronto");   
             break;
-            //Inserindo o valor e verificando se deu certo
+            //Lendo os dados e verificando se deu certo
             case(2):
-                             
+                fclose(dados);
+                dados = fopen("alunos.txt", "r");
+                if (dados == NULL){
+                    printf("Erro ao abrir o arquivo!");
+                    exit(1);
+                }
             break;
-            //verificando se tem valores antes de imprimir e imprimir
+            //Inserir os dados
             case(3):
-
+                while(fgets(auxTexto, 50, dados) != NULL){
+                fscanf(auxTexto, "%d %s %f %f %f", &estudante.matricula, estudante.nome, &estudante.n1, &estudante.n2, &estudante.n3);
+                insereHash(ha,estudante.matricula, &dados);
+            }
             break;
-            //Verificando se o valor existe antes de deduzir do auxiliar qnt para não perder quantos elementos tem
+            //Consultar a lista
             case(4):
-                
-            break;
-            //Limpa a equação por completo mas não libera a lista
-            case(5):
-               
-            break;
-            //Calcula toda a função se ela existir
-            case (6):
-                
+                printf("\nQual a matrícula do aluno: ");
+                scanf("%d",&estudante.matricula);
+                if (buscaHash(ha, estudante.matricula, &estudante))
+                    printf("\n %d %s %f %f %f", estudante.matricula, estudante.nome, estudante.n1, estudante.n2, estudante.n3); 
+                else printf("\nNão encontrado...");
             break;
             //libera a lista por completo e fecha o programa
-            case (7):    
-                return 0;
+            case(5):
+               liberaHash(ha);
+               fclose(dados);
+               return 0;
             break;
 
             default:
@@ -45,5 +55,7 @@ int main(void)
             break;
         } 
     }while (1);
+    liberaHash(ha);
+    fclose(dados);
     return 1; //programa saiu dos casos então é erro, melhor encerrar por aqui
 }
