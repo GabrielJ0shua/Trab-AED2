@@ -4,7 +4,7 @@
 #define M 1601
 
 struct hash{
-    int qtd, TABLE_SIZE;
+    int qtd, TABLE_SIZE, TAMANHO_TIPO;
     void **dados;
 };
 
@@ -13,6 +13,7 @@ Hash* criaHash(int TABLE_SIZE, int TAMANHO_TIPO){
     if(ha !=NULL){
         int i;
         ha->TABLE_SIZE = TABLE_SIZE;
+        ha->TAMANHO_TIPO = TAMANHO_TIPO;
         ha->dados = (void*)malloc(TABLE_SIZE *(TAMANHO_TIPO));
         if(ha->dados == NULL){
             free(ha);
@@ -45,17 +46,18 @@ int sondagemLinear(int pos, int i, int TABLE_SIZE){
     return ((pos + 1) & 0x7FFFFFFF) % TABLE_SIZE;
 }
 
+int redimensiona(Hash* ha, int TABLE_SIZE){
+    
+    ha->TABLE_SIZE = 2* ha->TABLE_SIZE;
+    
+}
+
 int insereHash(Hash* ha,int chave, void *dados){
     if(ha == NULL || ha->qtd == ha->TABLE_SIZE)
         return 0;
 
     if ((float)ha->qtd / (float)ha->TABLE_SIZE > 0.75){
-        // int i = ha->TABLE_SIZE;
-        ha->TABLE_SIZE = 2* ha->TABLE_SIZE;
-        // while(i < ha->TABLE_SIZE){
-        //     ha->dados[i] = NULL;
-        //     i++;
-        // }
+        redimensiona(ha, ha->TABLE_SIZE);
     }
     // verifica se mais de 75% das posicoes da tabela estao ocupadas
     // se estiverem, dobra o tamanho da tabela
@@ -66,7 +68,7 @@ int insereHash(Hash* ha,int chave, void *dados){
         newPos = sondagemLinear(pos,i,ha->TABLE_SIZE);
         if(ha->dados[newPos] == NULL){
             void *novo;
-            novo = (void*) malloc(sizeof(dados));
+            novo = (void*) malloc(sizeof(ha->TAMANHO_TIPO));
             if(novo == NULL)
                 return 0;
 
