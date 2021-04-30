@@ -37,10 +37,9 @@ int main(void){
             case(3):
                 printf("\nQual a matrícula do aluno: ");
                 scanf("%d",&estudante.matricula);
-                int codigo = buscaHash(ha, estudante.matricula, &estudante);
-                if (codigo == 1)
+                if (buscaHash(ha, estudante.matricula, &estudante))
                     printf("\n %d %s %f %f %f", estudante.matricula, estudante.nome, estudante.n1, estudante.n2, estudante.n3); 
-                else printf("\n%d Não encontrado...",codigo);
+                else printf("\nNão encontrado...");
             break;
             //libera a lista por completo e fecha o programa
             case(5):
