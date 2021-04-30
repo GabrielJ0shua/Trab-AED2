@@ -114,7 +114,7 @@ int buscaHash(Hash* ha, int chave , void *dados){
     for(i=0; i < ha->TABLE_SIZE; i++){
         newPos = sondagemLinear(pos, i, ha->TABLE_SIZE);
         if(ha->dados[newPos] == NULL)
-            return 2;
+            return 0;
         
         memcpy(&vchave, ha->dados[newPos], sizeof(int));
         // copia os bits do tamanho de um inteiro DE ha->dados[newPos] PARA vchave
@@ -125,5 +125,5 @@ int buscaHash(Hash* ha, int chave , void *dados){
             return 1;
         }
     }
-    return 3;
+    return 0;
 }
