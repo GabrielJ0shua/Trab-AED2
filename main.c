@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "tabhash.h"
 #define M 1601
 
@@ -21,16 +22,22 @@ int main(void){
             break;
             //Le e insere os dados e verificando se deu certo
             case(2):
-                dados = fopen("alunos.txt", "a");
+                dados = fopen("alunos.txt", "r");
                 if (dados == NULL){
                     printf("Erro ao abrir o arquivo!");
                     return 1;
                 }
-                while(fgets(auxTexto, sizeof(auxTexto), dados) != NULL){
-                    fscanf((FILE*)auxTexto, "%d %s %f %f %f", &estudante.matricula, estudante.nome, &estudante.n1, &estudante.n2, &estudante.n3);
-                    insereHash(ha,estudante.matricula, &estudante);
+                char file_contents[50] = "a"; //= malloc(sizeof(Aluno));
+                int r = 10;
+                while(1){
+                    if(feof(dados)) break;
+                    fscanf(dados, "%d %s %d %d %d", &estudante.matricula, estudante.nome, &estudante.n1, &estudante.n2, &estudante.n3);
+                    
+                    // fgetc(dados);
+                    // printf("%s", estudante.nome);
+                    r = insereHash(ha,estudante.matricula, &estudante);
                 }
-                printf("Dados inseridos");
+                printf("%d Dados inseridos",r);
                 fclose(dados);
             break;
             //Consultar a lista
@@ -38,7 +45,7 @@ int main(void){
                 printf("\nQual a matrícula do aluno: ");
                 scanf("%d",&estudante.matricula);
                 if (buscaHash(ha, estudante.matricula, &estudante))
-                    printf("\n %d %s %f %f %f", estudante.matricula, estudante.nome, estudante.n1, estudante.n2, estudante.n3); 
+                    printf("\n %d %s %d %d %d", estudante.matricula, estudante.nome, estudante.n1, estudante.n2, estudante.n3); 
                 else printf("\nNão encontrado...");
             break;
             //libera a lista por completo e fecha o programa
