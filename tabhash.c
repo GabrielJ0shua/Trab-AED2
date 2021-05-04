@@ -42,8 +42,13 @@ int chaveDivisao(int chave, int TABLE_SIZE){
     return (chave & 0x7FFFFFFF) % TABLE_SIZE;
 }
 
-int sondagemLinear(int pos, int i, int TABLE_SIZE){
-    return ((pos + 1) & 0x7FFFFFFF) % TABLE_SIZE;
+// int sondagemLinear(int pos, int i, int TABLE_SIZE){
+//     return ((pos + 1) & 0x7FFFFFFF) % TABLE_SIZE;
+// }
+
+int sondagemQuadratica(int pos, int i, int TABLE_SIZE){
+    pos = pos + 2*i + 5*i*i;// hash + (c1 * i) + (c2 * i^2)
+    return (pos & 0x7FFFFFFF) % TABLE_SIZE;
 }
 
 int redimensiona(Hash* ha){
@@ -60,7 +65,7 @@ int redimensiona(Hash* ha){
             pos = chaveDivisao(antiga_chave, ha->TABLE_SIZE*2);
             
             for(j=0; j<ha->TABLE_SIZE*2; j++){
-                newPos = sondagemLinear(pos,j,ha->TABLE_SIZE*2);
+                newPos = sondagemQuadratica(pos,j,ha->TABLE_SIZE*2);
 
                 if(novaTabela[newPos] == NULL){
                     novaTabela[newPos] = ha->dados[i];
@@ -79,8 +84,10 @@ int insereHash(Hash* ha,int chave, void *dados){
     if(ha == NULL || ha->qtd == ha->TABLE_SIZE)
         return 6;
 
-    if ((float)ha->qtd / (float)ha->TABLE_SIZE > 0.75){
+    float load = (float)ha->qtd / (float)ha->TABLE_SIZE;
+    if (load > 0.75){
         redimensiona(ha);
+        //printf("%d\n",ha->TABLE_SIZE);
         // printf("%d\n",redimensiona(ha));
     }
     // verifica se mais de 75% das posicoes da tabela estao ocupadas
@@ -92,7 +99,7 @@ int insereHash(Hash* ha,int chave, void *dados){
     for (i = 0; i < ha->TABLE_SIZE; i++){
         // printf("entrou\n");
         // printf("%d\n",ha->TABLE_SIZE);
-        newPos = sondagemLinear(pos,i,ha->TABLE_SIZE);
+        newPos = sondagemQuadratica(pos,i,ha->TABLE_SIZE);
         if(ha->dados[newPos] == NULL){
             void *novo;
             novo = (void*) malloc(ha->TAMANHO_TIPO);
@@ -116,7 +123,7 @@ int buscaHash(Hash* ha, int chave , void *dados){
     int i, pos, newPos, vchave;
     pos =  chaveDivisao(chave, ha->TABLE_SIZE);
     for(i=0; i < ha->TABLE_SIZE; i++){
-        newPos = sondagemLinear(pos, i, ha->TABLE_SIZE);
+        newPos = sondagemQuadratica(pos, i, ha->TABLE_SIZE);
         if(ha->dados[newPos] == NULL)
             return 0;
         

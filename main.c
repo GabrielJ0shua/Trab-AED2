@@ -12,7 +12,7 @@ int main(void){
     char auxTexto[50];
     //Menu
     do{
-        printf("\nEscolha uma opcao:\n1 - Inicializar o Hash\n2-Inserir a base de dados\n3-Consultar a posicao\n4-Sair do sistema\n");
+        printf("\nEscolha uma opcao:\n1 - Inicializar o Hash\n2 - Inserir a base de dados\n3 - Consultar a posicao\n4 - Sair do sistema\n");
         scanf("%d",&opc);
         switch(opc){
             
@@ -36,27 +36,28 @@ int main(void){
                     // fgetc(dados);
                     // printf("%s", estudante.nome);
                     r = insereHash(ha,estudante.matricula, &estudante);
+
                 }
                 printf("%d Dados inseridos",r);
                 fclose(dados);
             break;
             //Consultar a lista
             case(3):
-                printf("\nQual a matrícula do aluno: ");
+                printf("\nQual a matricula do aluno: ");
                 scanf("%d",&estudante.matricula);
                 if (buscaHash(ha, estudante.matricula, &estudante))
                     printf("\n %d %s %d %d %d", estudante.matricula, estudante.nome, estudante.n1, estudante.n2, estudante.n3); 
-                else printf("\nNão encontrado...");
+                else printf("\nNao encontrado...");
             break;
             //libera a lista por completo e fecha o programa
-            case(5):
+            case(4):
                liberaHash(ha);
                fclose(dados);
                return 0;
             break;
 
             default:
-                printf("\nOpção Invalida...");
+                printf("\nOpcao Invalida...");
             break;
         } 
     }while (1);
