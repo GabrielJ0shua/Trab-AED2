@@ -1,3 +1,5 @@
+#define M 1601
+
 struct aluno{
     int matricula,n1,n2,n3;
     char nome[30];
